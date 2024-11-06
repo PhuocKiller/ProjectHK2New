@@ -1,0 +1,54 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class SkillDirection : MonoBehaviour
+{
+    [SerializeField] GameObject ImageParent;
+    public Image skillImage; // Kéo thả hình ảnh vào đây trong Inspector
+    public float skillDuration = 0.5f; // Thời gian kỹ năng
+    public Vector3 direction, directionNormalize, fixPosition;
+    PlayerController player;
+    private void Start()
+    {
+        player= ImageParent.transform.parent.parent.GetComponent<PlayerController>();
+    }
+    void Update()
+    {
+        
+    }
+
+    public void GetMouseUp()
+    {
+        //  if (player.state != 5) return;
+       // player.state = 0;
+        ImageParent.transform.position = fixPosition;
+        ImageParent.GetComponentInChildren<Image>().enabled = false;
+    }
+
+    public void GetMouse()
+    {
+        if (player.state != 5) return;
+        Vector3 mousePosition = Input.mousePosition;
+        mousePosition.z = Camera.main.nearClipPlane;
+        Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, 200))
+        {
+            direction = hitInfo.point - fixPosition;
+            directionNormalize = direction.normalized;
+        }
+
+        ImageParent.transform.rotation = Quaternion.LookRotation(direction);
+        ImageParent.transform.localScale = new Vector3(1, 1, 0.22f * (hitInfo.point - fixPosition).magnitude);
+        ImageParent.transform.position = hitInfo.point - 0.45f * direction;
+        ImageParent.GetComponentInChildren<Image>().enabled = true;
+    }
+
+    public void GetMouseDown()
+    {
+       // if (player.state != 5) return;
+        fixPosition = ImageParent.transform.position;
+    }
+}
