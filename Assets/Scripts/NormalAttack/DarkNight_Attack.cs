@@ -13,6 +13,7 @@ public class DarkNight_Attack : NetworkBehaviour
     private TickTimer timer;
     public float timerDespawn;
     public float damage;
+    public bool isPhysicDamage;
     public override void Spawned()
     {
         base.Spawned();
@@ -23,7 +24,14 @@ public class DarkNight_Attack : NetworkBehaviour
             timer = TickTimer.CreateFromSeconds(Runner, timerDespawn);
         }
     }
-
+    public void SetUp(Transform parentObject, float levelDamage, bool isPhysicDamage,
+        bool isMakeStun = false, bool isMakeSlow = false, bool isMakeSilen = false, float timeTrigger = 0f,
+        float TimeEffect = 0f)
+    {
+        transform.SetParent(parentObject);
+        damage = levelDamage;
+        timerDespawn = timeTrigger;
+    }
     public override void FixedUpdateNetwork()
     {
         base.FixedUpdateNetwork();
@@ -39,6 +47,7 @@ public class DarkNight_Attack : NetworkBehaviour
     {
         direction = newDirection;
     }
+    
 
     private void OnTriggerEnter(Collider other)
     {
@@ -52,7 +61,7 @@ public class DarkNight_Attack : NetworkBehaviour
             )
         {
             collisions.Add(other);
-            other.gameObject.GetComponent<ICanTakeDamage>().ApplyDamage(damage, Object.InputAuthority,
+            other.gameObject.GetComponent<ICanTakeDamage>().ApplyDamage(damage, isPhysicDamage, Object.InputAuthority,
                 () =>
                 {
                   //  Runner.Despawn(Object);

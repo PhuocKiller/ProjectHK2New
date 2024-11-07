@@ -13,7 +13,7 @@ using static UnityEditorInternal.VersionControl.ListControl;
 
 public class PlayerController : NetworkBehaviour, ICanTakeDamage
 {
-    PlayerStat playerStat = new PlayerStat(maxHealth: 100, maxMana: 50, damage: 20);
+    public PlayerStat playerStat = new PlayerStat(maxHealth: 100, maxMana: 200, damage: 50);
     CharacterInput characterInput;
     Vector2 moveInput;
     Vector3 moveDirection;
@@ -89,7 +89,7 @@ public class PlayerController : NetworkBehaviour, ICanTakeDamage
         CalculateMove();
         CalculateJump();
         textHealth.text = ((int)playerStat.currentHealth).ToString() + "/" + ((int)playerStat.maxHealth).ToString();
-
+        transform.GetChild(0).forward=Camera.main.transform.forward;    //xoay statuscanvas để mọi player nhìn rõ
     }
 
     private void CalculateJump()
@@ -319,14 +319,19 @@ public class PlayerController : NetworkBehaviour, ICanTakeDamage
         }
     }
 
-    public void ApplyDamage(float damage, PlayerRef player, Action callback = null)
+    public void ApplyDamage(float damage,bool isPhysicDamage, PlayerRef player, Action callback = null)
     {
-        CalculateHealthRPC(damage, player);
+        CalculateHealthRPC(damage, isPhysicDamage, player);
         callback?.Invoke();
     }
-    [Rpc(RpcSources.All, RpcTargets.All)]
-    public void CalculateHealthRPC(float damage, PlayerRef player)
+    public void ApplyEffect(PlayerRef player,bool isMakeStun = false, bool isMakeSlow = false, bool isMakeSilen = false, float TimeEffect = 0, Action callback = null)
     {
+     //   CalculateEffectRPC(isMakeStun)
+    }
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void CalculateHealthRPC(float damage, bool isPhysicDamage, PlayerRef player)
+    {
+        if (playerStat.currentHealth == 0) return;
         if (playerStat.currentHealth > damage)
         {
             animator.SetTrigger("Injured");
@@ -353,8 +358,6 @@ public class PlayerController : NetworkBehaviour, ICanTakeDamage
         }
     }
 
-
-
-
+    
 }
 

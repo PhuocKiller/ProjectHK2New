@@ -22,9 +22,7 @@ public class DarkNight : PlayerController
         Runner.Spawn(VFXEffect, normalAttackTransform.transform.position, normalAttackTransform.rotation, inputAuthority: Object.InputAuthority
      , onBeforeSpawned: (NetworkRunner runner, NetworkObject obj) =>
      {
-         obj.transform.SetParent(normalAttackTransform);
-         obj.gameObject.GetComponent<DarkNight_Attack>().damage = levelDamage;
-         obj.GetComponent<DarkNight_Attack>().timerDespawn = timeTrigger;
+         obj.GetComponent<DarkNight_Attack>().SetUp(normalAttackTransform, playerStat.damage, true, timeTrigger: timeTrigger);
      }
                         );
     }
@@ -35,10 +33,7 @@ public class DarkNight : PlayerController
         NetworkObject obj = Runner.Spawn(VFXEffect, skill_1Transform.position, skill_1Transform.rotation, Object.InputAuthority,
             onBeforeSpawned: (NetworkRunner runner, NetworkObject obj) =>
             {
-                
-                obj.transform.SetParent(skill_1Transform);
-                obj.gameObject.GetComponent<DarkNight_Attack>().damage = levelDamage;
-                obj.GetComponent<DarkNight_Attack>().timerDespawn = timeTrigger;
+                obj.GetComponent<DarkNight_Attack>().SetUp(skill_1Transform, levelDamage, true, timeTrigger: timeTrigger);
                 StartCoroutine(DelaySkill_1_Collider(obj));
             });
     }
@@ -54,9 +49,7 @@ public class DarkNight : PlayerController
         NetworkObject obj = Runner.Spawn(VFXEffect, skill_2Transform.position, skill_2Transform.rotation, Object.InputAuthority,
             onBeforeSpawned: (NetworkRunner runner, NetworkObject obj) =>
             {
-                obj.transform.SetParent(skill_2Transform);
-                obj.gameObject.GetComponent<DarkNight_Attack>().damage = levelDamage;
-                obj.GetComponent<DarkNight_Attack>().timerDespawn = timeTrigger;
+                obj.GetComponent<DarkNight_Attack>().SetUp(skill_2Transform, levelDamage, true, timeTrigger: timeTrigger);
             });
     }
     public override void Ultimate(GameObject VFXEffect, float levelDamage, bool isPhysicDamage,
@@ -66,10 +59,7 @@ public class DarkNight : PlayerController
         NetworkObject obj = Runner.Spawn(VFXEffect, ultimateTransform.position, ultimateTransform.rotation, Object.InputAuthority,
             onBeforeSpawned: (NetworkRunner runner, NetworkObject obj) =>
             {
-
-                obj.transform.SetParent(ultimateTransform);
-                obj.gameObject.GetComponent<DarkNight_Attack>().damage = levelDamage;
-                obj.GetComponent<DarkNight_Attack>().timerDespawn = timeTrigger;
+                obj.GetComponent<DarkNight_Attack>().SetUp(ultimateTransform, levelDamage, true, timeTrigger: timeTrigger);
                 StartCoroutine(DelayUltimateCollider(obj));
             });
     }

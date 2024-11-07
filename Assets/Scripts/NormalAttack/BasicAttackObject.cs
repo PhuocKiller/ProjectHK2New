@@ -12,6 +12,7 @@ public class BasicAttackObject : NetworkBehaviour
     private List<Collider> collisions = new List<Collider>();
 
     public TickTimer timer;
+    public bool isPhysicDamage;
     public override void Spawned()
     {
         base.Spawned();
@@ -53,7 +54,7 @@ public class BasicAttackObject : NetworkBehaviour
             )
         {
             collisions.Add(other);
-            other.gameObject.GetComponent<ICanTakeDamage>().ApplyDamage(20, Object.InputAuthority,
+            other.gameObject.GetComponent<ICanTakeDamage>().ApplyDamage(20, isPhysicDamage, Object.InputAuthority,
                 () =>
                 {
                     Runner.Despawn(Object);
