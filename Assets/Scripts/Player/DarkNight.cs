@@ -5,8 +5,17 @@ using UnityEngine;
 
 public class DarkNight : PlayerController
 {
+    
     [SerializeField] public Transform normalAttackTransform, skill_1Transform, skill_2Transform, ultimateTransform;
     TickTimer timerSkill2;
+
+    public override void Spawned()
+    {
+        base.Spawned();
+       /* playerStat = new PlayerStat(maxHealth: 300, maxMana: 100, damage: 50, maxXP: 100, defend: 5, magicResistance: 0.2f,
+            criticalChance: 0f, criticalDamage: 0f, moveSpeed: 300);*/
+    }
+
     public override void NormalAttack(GameObject VFXEffect, float levelDamage, bool isPhysicDamage,
         bool isMakeStun = false, bool isMakeSlow = false, bool isMakeSilen = false, float timeTrigger = 0f, 
         float TimeEffect = 0f)
@@ -22,7 +31,7 @@ public class DarkNight : PlayerController
         Runner.Spawn(VFXEffect, normalAttackTransform.transform.position, normalAttackTransform.rotation, inputAuthority: Object.InputAuthority
      , onBeforeSpawned: (NetworkRunner runner, NetworkObject obj) =>
      {
-         obj.GetComponent<DarkNight_Attack>().SetUp(normalAttackTransform, playerStat.damage, true, timeTrigger: timeTrigger);
+         obj.GetComponent<DarkNight_Attack>().SetUp(normalAttackTransform, playerStat.b_damage, true, timeTrigger: timeTrigger);
      }
                         );
     }

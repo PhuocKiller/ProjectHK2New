@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StatusCanvas : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public Bars healthBarPlayer, healthBarHud, manaBarPlayer, manaBarHud, XPbar;
     void Start()
     {
         

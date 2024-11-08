@@ -13,7 +13,8 @@ using static UnityEditorInternal.VersionControl.ListControl;
 
 public class PlayerController : NetworkBehaviour, ICanTakeDamage
 {
-    public PlayerStat playerStat = new PlayerStat(maxHealth: 100, maxMana: 200, damage: 50);
+    public PlayerStat playerStat;
+    public StatusCanvas statusCanvas;
     CharacterInput characterInput;
     Vector2 moveInput;
     Vector3 moveDirection;
@@ -62,15 +63,15 @@ public class PlayerController : NetworkBehaviour, ICanTakeDamage
     public override void Spawned()
     {
         base.Spawned();
-
-
+        playerStat.UpgradeLevel();
         if (Object.InputAuthority.PlayerId == Runner.LocalPlayer.PlayerId)
         {
             Singleton<CameraController>.Instance.SetFollowCharacter(transformCamera, transform);
             Singleton<PlayerManager>.Instance.SetRunner(Runner);
+           
         }
     }
-    private void Start()
+    public virtual void Start()
     {
 
     }
@@ -88,8 +89,8 @@ public class PlayerController : NetworkBehaviour, ICanTakeDamage
 
         CalculateMove();
         CalculateJump();
-        textHealth.text = ((int)playerStat.currentHealth).ToString() + "/" + ((int)playerStat.maxHealth).ToString();
-        transform.GetChild(0).forward=Camera.main.transform.forward;    //xoay statuscanvas để mọi player nhìn rõ
+        statusCanvas.healthBarPlayer.UpdateBar(playerStat.currentHealth, playerStat.b_maxHealth);
+        transform.GetChild(0).GetChild(0).forward =Camera.main.transform.forward;    //xoay statuscanvas để mọi player nhìn rõ
     }
 
     private void CalculateJump()
@@ -324,12 +325,13 @@ public class PlayerController : NetworkBehaviour, ICanTakeDamage
         CalculateHealthRPC(damage, isPhysicDamage, player);
         callback?.Invoke();
     }
-    public void ApplyEffect(PlayerRef player,bool isMakeStun = false, bool isMakeSlow = false, bool isMakeSilen = false, float TimeEffect = 0, Action callback = null)
+    public void ApplyEffect(PlayerRef player,bool isMakeStun = false, bool isMakeSlow = false, bool isMakeSilen = false,
+        float TimeEffect = 0, Action callback = null)
     {
-     //   CalculateEffectRPC(isMakeStun)
+        CalculateEffectRPC(player);
+        callback?.Invoke();
     }
-    [Rpc(RpcSources.All, RpcTargets.All)]
-    public void CalculateHealthRPC(float damage, bool isPhysicDamage, PlayerRef player)
+    [Rpc(RpcSources.All, RpcTargets.All)] public void CalculateHealthRPC(float damage, bool isPhysicDamage, PlayerRef player)
     {
         if (playerStat.currentHealth == 0) return;
         if (playerStat.currentHealth > damage)
@@ -342,7 +344,19 @@ public class PlayerController : NetworkBehaviour, ICanTakeDamage
             playerStat.currentHealth = 0;
             SwithCharacterState(3);
         }
+    }
 
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void CalculateEffectRPC(PlayerRef player, bool isMakeStun = false,
+        bool isMakeSlow = false, bool isMakeSilen = false, float TimeEffect = 0)
+    {
+
+    }
+    [Rpc(RpcSources.All, RpcTargets.All)]
+    public void CalculateStatRPC(/*int level, float multipleHealth, float multipleMana, float multipleDamage, int multipleDefend,
+        float multipleMagicResistance, float multipleCriticalChance, float multipleCriticalDamage, int multipleMoveSpeed, int multipleAttackSpeed*/)
+    {
+        playerStat.UpgradeLevel();
     }
     public Player_Types GetPlayerTypes()
     {

@@ -9,9 +9,9 @@ public class MechanicDamage : MonoBehaviour
     {
         
     }
-    public int GetDamageOfTwoObject(int attack, int defend, float damageIncrease, float damageReduce)
+    public int GetDamageOfTwoObject(int damage, bool isPhysicDamage, int defend,float magicResistance, float damageIncrease, float damageReduce)
     {
-        return (int)(attack * UnityEngine.Random.Range(0.95f, 1.05f) *
+        return (int)(damage * UnityEngine.Random.Range(0.95f, 1.05f) *
             (1 - (deltaDamage * defend / (1 + deltaDamage * defend)))
            * damageIncrease * damageReduce);
     }

@@ -9876,10 +9876,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.3412033
+  m_Radius: 1.8345627
   m_Height: 4.3340254
   m_Direction: 0
-  m_Center: {x: -0.11895895, y: 0, z: 1.5130621}
+  m_Center: {x: -0.11895895, y: 0, z: 1.0197028}
 --- !u!114 &5620401622971878522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9951,7 +9951,13 @@ MonoBehaviour:
   WordCount: 0
   _interpolationDataSource: 0
   timerDespawn: 0
+  timeEffect: 0
   damage: 0
+  isPhysicDamage: 0
+  isMakeStun: 0
+  isMakeSlow: 0
+  isMakeSilen: 0
+  isDestroyWhenCollider: 0
 --- !u!1 &6982067714073744344
 GameObject:
   m_ObjectHideFlags: 0
