@@ -74,10 +74,6 @@ public class PlayerController : NetworkBehaviour, ICanTakeDamage
         
 
     }
-    
-
-
-
 
     public void Start()
     {
@@ -117,13 +113,13 @@ public class PlayerController : NetworkBehaviour, ICanTakeDamage
             if (isGround)
             {
                 velocity.y = 0;
-                characterControllerPrototype.Move(velocity * Time.deltaTime);
+                characterControllerPrototype.Move(velocity * Runner.DeltaTime);
             }
             else
             {
                 velocity += new Vector3(0, -100f * Runner.DeltaTime, 0);
 
-                characterControllerPrototype.Move(velocity * Time.deltaTime);
+                characterControllerPrototype.Move(velocity * Runner.DeltaTime);
             }
         }
     }
@@ -144,6 +140,7 @@ public class PlayerController : NetworkBehaviour, ICanTakeDamage
         float timeTrigger = 0f, float TimeEffect = 0f)
     {
         AnimatorRPC("Skill_1");
+        
     }
 
     public virtual void Skill_2(GameObject VFXEffect, float levelDamage, bool isPhysicDamage,
@@ -211,7 +208,7 @@ public class PlayerController : NetworkBehaviour, ICanTakeDamage
 
                 // Quaternion lookRotation = Quaternion.LookRotation(angleCamera * moveDirection);
 
-                characterControllerPrototype.Move(angleCamera * moveDirection * speed * 3 * Time.deltaTime);
+                characterControllerPrototype.Move(angleCamera * moveDirection * speed * 3 * Runner.DeltaTime);
             }
             Quaternion look = state == 5 ? Quaternion.LookRotation(GetComponent<SkillDirection>().directionNormalize) : angleCamera;
             transform.rotation = Quaternion.RotateTowards(transform.rotation, look, 720 * Runner.DeltaTime);
@@ -305,7 +302,7 @@ public class PlayerController : NetworkBehaviour, ICanTakeDamage
             float valueRandomSmooth = Mathf.Lerp(start, Speedtarget == null ?
                 (isMoveX ? targetX : targetY) : Speedtarget.Value, x * time);
             animator.SetFloat(animationName, valueRandomSmooth);
-            time += Time.deltaTime;
+            time += Runner.DeltaTime;
         }
     }
 
@@ -363,8 +360,8 @@ public class PlayerController : NetworkBehaviour, ICanTakeDamage
     {
 
     }
-   [Rpc(RpcSources.All, RpcTargets.All)]
-    public void CalculateStatRPC(/*int level, float multipleHealth, float multipleMana, float multipleDamage, int multipleDefend,
+   
+    public void CalculateStat(/*int level, float multipleHealth, float multipleMana, float multipleDamage, int multipleDefend,
         float multipleMagicResistance, float multipleCriticalChance, float multipleCriticalDamage, int multipleMoveSpeed, int multipleAttackSpeed*/)
     {
         playerStat.UpgradeLevel();

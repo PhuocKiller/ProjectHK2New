@@ -43,6 +43,7 @@ public class PlayerManager : NetworkBehaviour
     public void CheckPlayer(out int? state, out PlayerController player)
     {
         playerControllers= FindObjectsOfType<PlayerController>();
+        Debug.Log(playerControllers.Length);
         foreach(var playerController in playerControllers)
         {
             

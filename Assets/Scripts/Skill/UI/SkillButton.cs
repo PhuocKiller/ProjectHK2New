@@ -139,7 +139,7 @@ public class SkillButton : NetworkBehaviour
             if (skillButtonType == SkillButtonTypes.NormalAttack)
             {
                 player.NormalAttack(VfxEffect, damageSkill, isPhysicDamage, timeTrigger: timerTrigger);
-                player.CalculateStatRPC();
+                player.CalculateStat();
             }
             if (skillButtonType == SkillButtonTypes.Ultimate)
             {

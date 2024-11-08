@@ -77,5 +77,6 @@ public class PlayerStat: NetworkBehaviour
         UpdateBaseStat(level, multipleHealth, multipleMana, multipleDamage, multipleDefend,
             multipleMagicResistance, multipleCriticalChance, multipleCriticalDamage, multipleMoveSpeed, multipleAttackSpeed);
         currentHealth =b_maxHealth;
+
     }
 }

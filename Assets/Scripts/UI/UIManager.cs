@@ -11,15 +11,16 @@ using Fusion;
 
 public class UIManager : MonoBehaviour
 {
-    
+    PlayerController player;
+
     int numberHealPotionInt, numberManaPotionInt;
     [SerializeField] Transform inventoryPanel;
-    // Start is called before the first frame update
     void Start()
     {
        Singleton<Inventory>.Instance.ItemAdded += InventoryScript_ItemAdded;
         Singleton<Inventory>.Instance.ItemRemoved += Inventory_ItemRemoved;
         Singleton<Inventory>.Instance.InventoryUpdate += Inventory_Update;
+        
     }
 
     // Update is called once per frame
@@ -61,7 +62,6 @@ public class UIManager : MonoBehaviour
     }
     void Inventory_ItemRemoved(object sender, InventoryEventArgs e)
     {
-      //  Transform inventoryPanel = transform.Find("InventoryPanel");
         int index = -1; 
         foreach (Transform slot in inventoryPanel)
         {
@@ -71,16 +71,7 @@ public class UIManager : MonoBehaviour
             ItemDragHandler itemDragHandler = imageTransform.GetComponent<ItemDragHandler>();
             Transform textTransform = slot.GetChild(0).GetChild(1);
             Text txtCount = textTransform.GetComponent<Text>();
-            /*if (e.Item != null && itemDragHandler.Item != null)
-            {
-                if (itemDragHandler.Item.Equals(e.Item))
-                {
-                    image.enabled = false;
-                    image.sprite = null;
-                    itemDragHandler.Item = null;
-                    break;
-                }
-            }*/
+          
             if (itemDragHandler.Item == null) continue;
             if (e.Item.Slot.Id == index)
             {
