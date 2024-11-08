@@ -59,21 +59,29 @@ public class PlayerController : NetworkBehaviour, ICanTakeDamage
         characterInput = new CharacterInput();
         characterControllerPrototype = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+        
     }
     public override void Spawned()
     {
         base.Spawned();
-        playerStat.UpgradeLevel();
+        
         if (Object.InputAuthority.PlayerId == Runner.LocalPlayer.PlayerId)
         {
             Singleton<CameraController>.Instance.SetFollowCharacter(transformCamera, transform);
             Singleton<PlayerManager>.Instance.SetRunner(Runner);
-           
+            playerStat.UpgradeLevel();
         }
-    }
-    public virtual void Start()
-    {
+        
 
+    }
+    
+
+
+
+
+    public void Start()
+    {
+        
     }
     public override void FixedUpdateNetwork()
     {
@@ -89,7 +97,10 @@ public class PlayerController : NetworkBehaviour, ICanTakeDamage
 
         CalculateMove();
         CalculateJump();
-        statusCanvas.healthBarPlayer.UpdateBar(playerStat.currentHealth, playerStat.b_maxHealth);
+        
+            statusCanvas.healthBarPlayer.UpdateBar(playerStat.currentHealth, playerStat.b_maxHealth);
+        
+       
         transform.GetChild(0).GetChild(0).forward =Camera.main.transform.forward;    //xoay statuscanvas để mọi player nhìn rõ
     }
 
@@ -352,7 +363,7 @@ public class PlayerController : NetworkBehaviour, ICanTakeDamage
     {
 
     }
-    [Rpc(RpcSources.All, RpcTargets.All)]
+   [Rpc(RpcSources.All, RpcTargets.All)]
     public void CalculateStatRPC(/*int level, float multipleHealth, float multipleMana, float multipleDamage, int multipleDefend,
         float multipleMagicResistance, float multipleCriticalChance, float multipleCriticalDamage, int multipleMoveSpeed, int multipleAttackSpeed*/)
     {

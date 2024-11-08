@@ -10,7 +10,7 @@ public class NetworkManager : MonoBehaviour
 {
    NetworkRunner runner;
     [SerializeField]
-    GameObject character, gameManagerObj, playerManagerObj;
+    GameObject character, playerStat, gameManagerObj, playerManagerObj;
     GameNetworkCallBack gameNetworkCallBack;
     [SerializeField]
     UnityEvent onConnected;
@@ -34,15 +34,20 @@ public class NetworkManager : MonoBehaviour
 
         if (player == runner.LocalPlayer)
         {
-            NetworkObject robo = runner.Spawn(character, spawnPoint.position, Quaternion.identity, inputAuthority: player);
-           // StartCoroutine(DrawSkillButton(m_runner,player));
-            /*, onBeforeSpawned: OnBeforeSpawned);
-
-        void OnBeforeSpawned(NetworkRunner runner, NetworkObject roboObject)
-        {
-
-        }*/
+            NetworkObject characterObj = runner.Spawn(character, spawnPoint.position, Quaternion.identity, inputAuthority: player);
+            /*NetworkObject playerStatObj = runner.Spawn(playerStat, inputAuthority: player,
+                onBeforeSpawned: (NetworkRunner runner, NetworkObject playerStatObj) =>
+                {
+                    
+                   
+                });
+            playerStatObj.gameObject.transform.SetParent(characterObj.gameObject.transform);
+            Debug.Log("spawn stat");
+            characterObj.gameObject.GetComponent<PlayerController>().playerStat =
+                         playerStatObj.gameObject.GetComponent<PlayerStat>();
+            characterObj.gameObject.GetComponent<PlayerController>().playerStat.UpgradeLevel();*/
         }
+
     }
     public async void OnClickBtn(Button btn)
     {

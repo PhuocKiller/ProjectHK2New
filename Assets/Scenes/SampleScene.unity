@@ -3399,6 +3399,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character: {fileID: 8523547410306454324, guid: bbf4dafaeb203cd43ba218bdbdc16274, type: 3}
+  playerStat: {fileID: 2076329967216725245, guid: 014fac03943cc4a44b85ab322be94bf0, type: 3}
   gameManagerObj: {fileID: 1113951832087527282, guid: c37c820e186ca8c4c8d1c58edc5da70e, type: 3}
   playerManagerObj: {fileID: 4972084282100277471, guid: 811a59c4b0655be4a82f08cf229278f4, type: 3}
   onConnected:

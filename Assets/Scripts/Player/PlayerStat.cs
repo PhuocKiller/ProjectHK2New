@@ -1,39 +1,50 @@
 using System.ComponentModel;
+using Fusion;
 using UnityEngine;
 
-public class PlayerStat: MonoBehaviour
+public class PlayerStat: NetworkBehaviour
 {
-    public int level;
+    [Networked]
+    public int level {  get; set; }
     private void OnValidate()
     {
-        OnLevelChanged();
+       // OnLevelChanged();
     }
     public void OnLevelChanged()
     {
         UpdateBaseStat(level, multipleHealth, multipleMana, multipleDamage, multipleDefend,
             multipleMagicResistance, multipleCriticalChance, multipleCriticalDamage, multipleMoveSpeed, multipleAttackSpeed);
     }
-    public float b_maxHealth, multipleHealth;
+    [Networked] public float b_maxHealth {  get; set; }
+    public float multipleHealth;
     public float maxHealth;
-    public float currentHealth;
-    public float b_maxMana, multipleMana;
+    [Networked]  public float currentHealth { get; set; }
+    [Networked] public float b_maxMana { get; set; }
+    public float multipleMana;
     public float maxMana;
-    public float currentMana;
-    public int maxXP;
-    public int currentXP;
-    public float b_damage, multipleDamage;
+    [Networked]  public float currentMana { get; set; }
+    [Networked] public int maxXP { get; set; }
+    [Networked] public int currentXP { get; set; }
+    [Networked] public float b_damage { get; set; }
+    public float multipleDamage;
     public float damage;
-    public int b_defend;public int multipleDefend;
+    [Networked] public int b_defend { get; set; }
+    public int multipleDefend;
     public int defend;
-    public float b_magicResistance, multipleMagicResistance;
+    [Networked]  public float b_magicResistance { get; set; }
+    public float multipleMagicResistance;
     public float magicResistance;
-    public float b_criticalChance, multipleCriticalChance;
+    [Networked]  public float b_criticalChance { get; set; }
+    public float multipleCriticalChance;
     public float criticalChance;
-    public float b_criticalDamage, multipleCriticalDamage;
+    [Networked]  public float b_criticalDamage { get; set; }
+    public float multipleCriticalDamage;
     public float criticalDamage;
-    public int b_moveSpeed;public int multipleMoveSpeed;
+    [Networked]  public int b_moveSpeed { get; set; }
+    public int multipleMoveSpeed;
     public int moveSpeed;
-    public int b_attackSpeed; public int multipleAttackSpeed;
+    [Networked] public int b_attackSpeed { get; set; }
+    public int multipleAttackSpeed;
     public int attackSpeed;
     
 
