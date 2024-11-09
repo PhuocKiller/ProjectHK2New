@@ -28,6 +28,7 @@ public class SkillButton : NetworkBehaviour
     [SerializeField] SkillName m_skillName;
     public Action Skill_Trigger;
     [SerializeField] float timerTrigger;
+    [SerializeField] float[] levelManaCosts;
     [SerializeField] AudioClip triggerSoundFX;
     [SerializeField] float[] levelDamages;
     [SerializeField] bool isPhysicDamage;
@@ -36,7 +37,7 @@ public class SkillButton : NetworkBehaviour
     [SerializeField] bool isMakeSilen;
     [SerializeField] float timeEffect;
     [SerializeField] int levelSkill = 1;
-    [SerializeField] float damageSkill;
+    [SerializeField] float damageSkill, manaCost;
     #region EVENTS
     void RegisterEvent()
     {
@@ -59,10 +60,13 @@ public class SkillButton : NetworkBehaviour
         m_skillController = FindObjectOfType<SkillManager>().GetSkillController(skillName);
         skillType = m_skillController.skillType;
         VfxEffect = m_skillController.skillStat.VfxEffect;
-        levelDamages = new float[6];
+        levelDamages = new float[6]; levelManaCosts= new float[6];
+
+
         for (int i = 0; i < m_skillController.skillStat.levelDamages.Length; i++)
         {
             levelDamages[i] = m_skillController.skillStat.levelDamages[i];
+            levelManaCosts[i] = m_skillController.skillStat.levelManaCosts[i];
         }
         isPhysicDamage = m_skillController.skillStat.isPhysicDamage;
         isMakeStun = m_skillController.skillStat.isMakeStun;
@@ -74,6 +78,7 @@ public class SkillButton : NetworkBehaviour
         if (levelDamages.Length > 0)
         {
             damageSkill = levelDamages[levelSkill];
+            manaCost = levelManaCosts[levelSkill];
         };
         m_timeTriggerFilled.transform.parent.gameObject.SetActive(false);
         UpdateUI();
@@ -138,20 +143,20 @@ public class SkillButton : NetworkBehaviour
             }
             if (skillButtonType == SkillButtonTypes.NormalAttack)
             {
-                player.NormalAttack(VfxEffect, damageSkill, isPhysicDamage, timeTrigger: timerTrigger);
+                player.NormalAttack(VfxEffect, damageSkill,isPhysicDamage, timeTrigger: timerTrigger);
                 player.CalculateStat();
             }
             if (skillButtonType == SkillButtonTypes.Ultimate)
             {
-                player.Ultimate(VfxEffect, damageSkill, isPhysicDamage, timeTrigger: timerTrigger);
+                player.Ultimate(VfxEffect, damageSkill, manaCost, isPhysicDamage, timeTrigger: timerTrigger);
             }
             if (skillButtonType == SkillButtonTypes.Skill_2)
             {
-                player.Skill_2(VfxEffect, damageSkill, isPhysicDamage, timeTrigger: timerTrigger);
+                player.Skill_2(VfxEffect, damageSkill, manaCost, isPhysicDamage, timeTrigger: timerTrigger);
             }
             if (skillButtonType == SkillButtonTypes.Skill_1)
             {
-                player.Skill_1(VfxEffect, damageSkill, isPhysicDamage, timeTrigger: timerTrigger);
+                player.Skill_1(VfxEffect, damageSkill, manaCost, isPhysicDamage, timeTrigger: timerTrigger);
             }
             m_skillController.Trigger();
         }

@@ -37,7 +37,7 @@ public class PlayerController : NetworkBehaviour, ICanTakeDamage
     // 1 là jump
     // 2 là injured
     // 3 là die
-    // 4 là normal attack
+    // 4 là active attack
     // 5 là đang cast skill
     [Networked(OnChanged = nameof(listenState))]
     [SerializeField]
@@ -135,23 +135,25 @@ public class PlayerController : NetworkBehaviour, ICanTakeDamage
     {
         animator.SetTrigger(name);
     }
-    public virtual void Skill_1(GameObject VFXEffect, float levelDamage, bool isPhysicDamage,
+    public virtual void Skill_1(GameObject VFXEffect, float levelDamage, float manaCost, bool isPhysicDamage,
         bool isMakeStun = false, bool isMakeSlow = false, bool isMakeSilen = false,
         float timeTrigger = 0f, float TimeEffect = 0f)
     {
         AnimatorRPC("Skill_1");
-        
+        playerStat.currentMana -= manaCost;
     }
 
-    public virtual void Skill_2(GameObject VFXEffect, float levelDamage, bool isPhysicDamage,
+    public virtual void Skill_2(GameObject VFXEffect, float levelDamage, float manaCost, bool isPhysicDamage,
         bool isMakeStun = false, bool isMakeSlow = false, bool isMakeSilen = false, float timeTrigger = 0f, float TimeEffect = 0f)
     {
         AnimatorRPC("Skill_2");
+        playerStat.currentMana -= manaCost;
     }
-    public virtual void Ultimate(GameObject VFXEffect, float levelDamage, bool isPhysicDamage,
+    public virtual void Ultimate(GameObject VFXEffect, float levelDamage, float manaCost, bool isPhysicDamage,
         bool isMakeStun = false, bool isMakeSlow = false, bool isMakeSilen = false, float timeTrigger = 0f, float TimeEffect = 0f)
     {
         AnimatorRPC("Ultimate");
+        playerStat.currentMana -= manaCost;
     }
 
     public virtual void NormalAttack(GameObject VFXEffect, float levelDamage, bool isPhysicDamage,
@@ -345,7 +347,7 @@ public class PlayerController : NetworkBehaviour, ICanTakeDamage
         if (playerStat.currentHealth > damage)
         {
             animator.SetTrigger("Injured");
-            playerStat.currentHealth -= damage;
+            playerStat.currentHealth -= (int)damage;
         }
         else
         {

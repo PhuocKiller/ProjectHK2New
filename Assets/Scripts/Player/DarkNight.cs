@@ -35,10 +35,10 @@ public class DarkNight : PlayerController
      }
                         );
     }
-    public override void Skill_1(GameObject VFXEffect, float levelDamage, bool isPhysicDamage,
+    public override void Skill_1(GameObject VFXEffect, float levelDamage, float manaCost, bool isPhysicDamage,
         bool isMakeStun = false, bool isMakeSlow = false, bool isMakeSilen = false, float timeTrigger = 0f, float TimeEffect = 0f)
     {
-        base.Skill_1(VFXEffect, levelDamage, isPhysicDamage, timeTrigger: timeTrigger);
+        base.Skill_1(VFXEffect, levelDamage, manaCost, isPhysicDamage, timeTrigger: timeTrigger);
         NetworkObject obj = Runner.Spawn(VFXEffect, skill_1Transform.position, skill_1Transform.rotation, Object.InputAuthority,
             onBeforeSpawned: (NetworkRunner runner, NetworkObject obj) =>
             {
@@ -51,26 +51,34 @@ public class DarkNight : PlayerController
         yield return new WaitForSeconds(0.5f);
         obj.GetComponent<CapsuleCollider>().enabled = true;
     }
-    public override void Skill_2(GameObject VFXEffect, float levelDamage, bool isPhysicDamage,
+    public override void Skill_2(GameObject VFXEffect, float levelDamage, float manaCost, bool isPhysicDamage,
         bool isMakeStun = false, bool isMakeSlow = false, bool isMakeSilen = false, float timeTrigger = 0f, float TimeEffect = 0f)
     {
-        base.Skill_2(VFXEffect, levelDamage, isPhysicDamage,timeTrigger: timeTrigger);
+        base.Skill_2(VFXEffect, levelDamage, manaCost, isPhysicDamage,timeTrigger: timeTrigger);
         NetworkObject obj = Runner.Spawn(VFXEffect, skill_2Transform.position, skill_2Transform.rotation, Object.InputAuthority,
             onBeforeSpawned: (NetworkRunner runner, NetworkObject obj) =>
             {
                 obj.GetComponent<DarkNight_Attack>().SetUp(skill_2Transform, levelDamage, true, timeTrigger: timeTrigger);
             });
     }
-    public override void Ultimate(GameObject VFXEffect, float levelDamage, bool isPhysicDamage,
+    public override void Ultimate(GameObject VFXEffect, float levelDamage, float manaCost, bool isPhysicDamage,
         bool isMakeStun = false, bool isMakeSlow = false, bool isMakeSilen = false, float timeTrigger = 0f, float TimeEffect = 0f)
     {
-        base.Ultimate(VFXEffect, levelDamage, isPhysicDamage, timeTrigger: timeTrigger);
+        base.Ultimate(VFXEffect, levelDamage, manaCost, isPhysicDamage, timeTrigger: timeTrigger);
+        StartCoroutine(DelayUltimate(VFXEffect, levelDamage, isPhysicDamage, timeTrigger: timeTrigger));
+
+        
+    }
+    IEnumerator DelayUltimate(GameObject VFXEffect, float levelDamage, bool isPhysicDamage,
+        bool isMakeStun = false, bool isMakeSlow = false, bool isMakeSilen = false, float timeTrigger = 0f, float TimeEffect = 0f)
+    {
+        yield return new WaitForSeconds(1f);
         NetworkObject obj = Runner.Spawn(VFXEffect, ultimateTransform.position, ultimateTransform.rotation, Object.InputAuthority,
             onBeforeSpawned: (NetworkRunner runner, NetworkObject obj) =>
             {
                 obj.GetComponent<DarkNight_Attack>().SetUp(ultimateTransform, levelDamage, true, timeTrigger: timeTrigger);
-                StartCoroutine(DelayUltimateCollider(obj));
             });
+        StartCoroutine(DelayUltimateCollider(obj));
     }
     IEnumerator DelayUltimateCollider(NetworkObject obj)
     {

@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using Fusion;
 using UnityEngine;
@@ -12,40 +13,47 @@ public class PlayerStat: NetworkBehaviour
     }
     public void OnLevelChanged()
     {
-        UpdateBaseStat(level, multipleHealth, multipleMana, multipleDamage, multipleDefend,
-            multipleMagicResistance, multipleCriticalChance, multipleCriticalDamage, multipleMoveSpeed, multipleAttackSpeed);
+        /*UpdateBaseStat(level, multipleHealth, multipleMana, multipleDamage, multipleDefend,
+            multipleMagicResistance, multipleCriticalChance, multipleCriticalDamage, multipleMoveSpeed, multipleAttackSpeed);*/
     }
+    
     [Networked] public float b_maxHealth {  get; set; }
-    public float multipleHealth;
-    public float maxHealth;
-    [Networked]  public float currentHealth { get; set; }
+    [Networked] public float currentHealth { get; set; }
     [Networked] public float b_maxMana { get; set; }
-    public float multipleMana;
-    public float maxMana;
-    [Networked]  public float currentMana { get; set; }
+    [Networked] public float currentMana { get; set; }
     [Networked] public int maxXP { get; set; }
     [Networked] public int currentXP { get; set; }
     [Networked] public float b_damage { get; set; }
-    public float multipleDamage;
-    public float damage;
     [Networked] public int b_defend { get; set; }
-    public int multipleDefend;
-    public int defend;
-    [Networked]  public float b_magicResistance { get; set; }
-    public float multipleMagicResistance;
-    public float magicResistance;
-    [Networked]  public float b_criticalChance { get; set; }
-    public float multipleCriticalChance;
-    public float criticalChance;
-    [Networked]  public float b_criticalDamage { get; set; }
-    public float multipleCriticalDamage;
-    public float criticalDamage;
-    [Networked]  public int b_moveSpeed { get; set; }
-    public int multipleMoveSpeed;
-    public int moveSpeed;
+    [Networked] public float b_magicResistance { get; set; }
+    [Networked] public float b_magicAmpli { get; set; }
+    [Networked] public float b_criticalChance { get; set; }
+    [Networked] public float b_criticalDamage { get; set; }
+    [Networked] public int b_moveSpeed { get; set; }
     [Networked] public int b_attackSpeed { get; set; }
-    public int multipleAttackSpeed;
+    [Header("Full Stat")]
+    public float maxHealth;
+    public float maxMana;
+    public float damage;
+    public int defend;
+    public float magicResistance;
+    public float magicAmpli;
+    public float criticalChance;
+    public float criticalDamage;
+    public int moveSpeed;
     public int attackSpeed;
+    [Space(1)]
+    [Header("Multiple Stat")]
+    public float multipleHealth;
+    public float multipleMana;
+    public float multipleDamage;
+    public int multipleDefend;
+    public float multipleMagicResistance;
+    public float multipleMagicAmpli;
+    public float multipleCriticalChance;
+    public float multipleCriticalDamage;
+    public int multipleMoveSpeed;
+    public int multipleAttackSpeed;
     
 
 
@@ -61,22 +69,34 @@ public class PlayerStat: NetworkBehaviour
         this.b_moveSpeed = moveSpeed;
     }
     public void UpdateBaseStat(int level, float multipleHealth, float multipleMana, float multipleDamage, int multipleDefend,
-        float multipleMagicResistance, float multipleCriticalChance, float multipleCriticalDamage,int multipleMoveSpeed,int multipleAttackSpeed)
+        float multipleMagicResistance, float multipleMagicAmpli,
+        float multipleCriticalChance,float multipleCriticalDamage,int multipleMoveSpeed,int multipleAttackSpeed)
     {
         b_maxHealth = 300 + (level-1) * multipleHealth; b_maxMana = 100 + (level - 1) * multipleMana;
-        b_damage= 50 + (level - 1) * multipleDamage; b_defend= 5 + ((level - 1) * multipleDefend);
-        b_magicResistance = 0.2f + (level - 1) * multipleMagicResistance;
-        b_criticalChance=0+ (level - 1) * multipleCriticalChance; b_criticalDamage= 0+ (level - 1) * multipleCriticalDamage;
+        maxXP = 100 + (level - 1) * (level - 1) * 50;
+        b_damage = 50 + (level - 1) * multipleDamage; b_defend= 5 + ((level - 1) * multipleDefend);
+        b_magicResistance = 0.2f + (level - 1) * multipleMagicResistance; b_magicAmpli = 0 + (level - 1) * multipleMagicAmpli;
+        b_criticalChance =0+ (level - 1) * multipleCriticalChance; b_criticalDamage= 0+ (level - 1) * multipleCriticalDamage;
         b_moveSpeed=300+((level - 1) * multipleMoveSpeed);
         b_attackSpeed=100 + ((level - 1) * multipleAttackSpeed);
     }
     public void UpgradeLevel()
     {
-        Debug.Log("vo dya");
         level++;
         UpdateBaseStat(level, multipleHealth, multipleMana, multipleDamage, multipleDefend,
-            multipleMagicResistance, multipleCriticalChance, multipleCriticalDamage, multipleMoveSpeed, multipleAttackSpeed);
-        currentHealth =b_maxHealth;
+            multipleMagicResistance,multipleMagicAmpli, 
+            multipleCriticalChance, multipleCriticalDamage, multipleMoveSpeed, multipleAttackSpeed);
+        UpdateFullStat();
+        currentHealth=maxHealth;
+        currentMana=maxMana;
+    }
 
+    private void UpdateFullStat()
+    {
+        maxHealth = b_maxHealth; maxMana = b_maxMana;
+        damage = b_damage; defend = b_defend;
+        magicResistance = b_magicResistance;
+        criticalChance = b_criticalChance; criticalDamage = b_criticalDamage;
+        moveSpeed = b_moveSpeed; attackSpeed = b_attackSpeed;
     }
 }

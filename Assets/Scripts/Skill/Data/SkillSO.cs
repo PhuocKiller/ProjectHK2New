@@ -7,6 +7,7 @@ public class SkillSO : ScriptableObject
 {
     public float timerTrigger;
     public float cooldownTime;
+    public float[] levelManaCosts;
     public Sprite skillIcon;
     public AudioClip triggerSoundFX;
     public float[] levelDamages;

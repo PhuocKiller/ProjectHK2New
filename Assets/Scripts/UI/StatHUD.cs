@@ -17,13 +17,18 @@ public class StatHUD : MonoBehaviour
     void Update()
     {
         if (player==null) return;
-        attackTMP.text= player.playerStat.damage.ToString();
+        attackTMP.text= ((int)player.playerStat.damage).ToString();
+        defTMP.text = player.playerStat.defend.ToString();
+        attackSpeedTMP.text = player.playerStat.attackSpeed.ToString();
+        magicAmpliTMP.text = ((player.playerStat.magicAmpli*100)).ToString() + "%";
+        magicResisTMP.text = ((int)(player.playerStat.magicResistance*100)).ToString() + "%";
+        moveSpeedTMP.text = player.playerStat.moveSpeed.ToString();
+
     }
     IEnumerator DelayCheckPlay()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
         Singleton<PlayerManager>.Instance.CheckPlayer(out int? state, out PlayerController player);
-        Debug.Log(player);
         this.player = player;
     }
 }
